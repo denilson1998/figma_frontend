@@ -1,0 +1,51 @@
+<div class="canvas-container">
+  <!-- Panel de control -->
+  <div class="control-panel">
+    <h2>Sala: {{currentRoom?.name}}</h2>
+    <p>Usuarios conectados: {{connectedUsers.join(', ')}}</p>
+    
+    <div class="component-selector">
+      <label>Tipo de componente:</label>
+      <select [(ngModel)]="selectedComponentType">
+        <option value="button">Botón</option>
+        <option value="text">Texto</option>
+        <option value="image">Imagen</option>
+        <option value="input">Campo de texto</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Canvases para cada dispositivo -->
+  <div class="device-canvases">
+    <div *ngFor="let device of deviceSizes; let i = index" 
+         class="device-wrapper">
+      <h3>{{device.name}} ({{device.width}}x{{device.height}})</h3>
+      <div class="device-canvas" 
+           [style.width.px]="device.width"
+           [style.height.px]="device.height"
+           (click)="addComponent($event, i)">
+        
+        <!-- Componentes del canvas -->
+        <div *ngFor="let component of components"
+             class="canvas-component"
+             [ngClass]="'component-' + component.type"
+             [style.left.px]="component.positionX"
+             [style.top.px]="component.positionY"
+             [style.width.px]="component.width"
+             [style.height.px]="component.height"
+             [style.background]="component.color"
+             [style.border]="component.type === 'input' ? '1px solid #ccc' : 'none'"
+             cdkDrag
+             (cdkDragEnded)="onDragEnd(component, $event)">
+             
+          <span *ngIf="component.type !== 'image'">{{component.content}}</span>
+          <img *ngIf="component.type === 'image' && component.content" 
+               [src]="component.content" 
+               style="max-width: 100%; max-height: 100%;">
+               
+          <button class="delete-btn" (click)="removeComponent(component.id)">×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

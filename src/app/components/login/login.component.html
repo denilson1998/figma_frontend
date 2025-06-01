@@ -6,13 +6,13 @@
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-        <input type="email" placeholder="usuario@correo.com"
+        <input type="email" [(ngModel)]="email" placeholder="usuario@correo.com" name="email"
           class="mt-1 block w-full px-4 py-2 border rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300" />
       </div>
 
       <div class="mb-6">
         <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-        <input type="password" placeholder="********"
+        <input type="password" placeholder="********" [(ngModel)]="password" name="password"
           class="mt-1 block w-full px-4 py-2 border rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300" />
       </div>
 
@@ -37,7 +37,7 @@
     </button>
     <h2 class="text-xl font-bold mb-4">Registrar Usuario</h2>
 
-    <form (ngsubmit)="registerUser()" #registerForm="ngForm">
+    <form >
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Nombre</label>
         <input type="text" [(ngModel)]="registerData.name" name="name" required
@@ -53,7 +53,7 @@
         <input type="password" [(ngModel)]="registerData.password" name="password" required
           class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300" />
       </div>
-      <button type="submit"
+      <button type="button" (click)="registerUser()"
         class="w-full bg-green-600 text-white py-2 px-4 rounded-xl hover:bg-green-700 transition duration-200">
         Registrar
       </button>

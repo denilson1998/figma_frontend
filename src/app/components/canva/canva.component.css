@@ -1,0 +1,78 @@
+.canvas-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.control-panel {
+  background: #f5f5f5;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.device-canvases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.device-wrapper {
+  margin-bottom: 30px;
+}
+
+.device-canvas {
+  position: relative;
+  background: white;
+  border: 2px solid #333;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.canvas-component {
+  position: absolute;
+  cursor: move;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.component-button {
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+}
+
+.component-text {
+  color: black;
+  width: auto !important;
+  height: auto !important;
+}
+
+.component-input {
+  border: 1px solid #ccc !important;
+  color: black;
+  padding: 5px;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.canvas-component:hover .delete-btn {
+  opacity: 1;
+}

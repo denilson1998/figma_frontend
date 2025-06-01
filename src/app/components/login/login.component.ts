@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,18 +23,31 @@ export class LoginComponent {
     email: '',
     password: ''
   };
+  
+  constructor(private userService: UserService, private router: Router)
+  {
+
+  }
 
   login() {
     // Implement login logic here
     console.log('Login enviado', this.email, this.password);
+    this.userService.login({ Email: this.email, Password: this.password })
+      .subscribe({
+        next: (res) => {
+          console.log('Login exitoso', res);
+          sessionStorage.setItem("userId", res.data);
+          alert("Login exitoso");
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error('Error al iniciar sesión', err);
+        }
+      });
   }
 
   openRegisterModal() {
-    console.log('====================================');
-    console.log(this.showRegisterModal);
-    console.log('====================================');
     this.showRegisterModal = true;
-    console.log(this.showRegisterModal);
   }
 
   closeRegisterModal() {
@@ -42,7 +57,21 @@ export class LoginComponent {
   registerUser() {
     // Handle modal close event if needed
     console.log('Usuario registrado', this.registerData);
-    this.closeRegisterModal();
+
+    this.userService.register({
+      Email: this.registerData.email,
+      Password: this.registerData.password,
+      Username: this.registerData.name
+    }).subscribe({
+      next: (res) => {
+        console.log(res);
+        console.log('Usuario registrado correctamente', res);
+        this.closeRegisterModal();
+      },
+      error: (err) => {
+        console.error('Error al registrar usuario', err);
+      }
+    });
   }
 
 }

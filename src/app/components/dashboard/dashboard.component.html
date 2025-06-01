@@ -1,0 +1,92 @@
+<div class="min-h-screen bg-gray-100 p-6">
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+      <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+        Cerrar sesión
+      </button>
+    </div>
+
+    <!-- Crear Room -->
+    <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Crear nueva sala</h2>
+      <form (submit)="createRoom()" class="flex flex-col sm:flex-row gap-4">
+        <input
+          type="text"
+          [(ngModel)]="newRoomName"
+          name="roomName"
+          class="border border-gray-300 rounded-lg px-4 py-2 w-full"
+          placeholder="Nombre de la sala"
+          required
+        />
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+          Crear sala
+        </button>
+      </form>
+    </div>
+
+    <!-- Lista de Rooms -->
+    <div class="bg-white p-6 rounded-xl shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Tus salas</h2>
+      <div *ngIf="rooms.length === 0" class="text-gray-500">No hay salas creadas aún.</div>
+
+      <ul *ngIf="rooms.length > 0" class="divide-y divide-gray-200">
+        <li *ngFor="let room of rooms" class="py-4 flex justify-between items-center">
+          <div>
+            <h3 class="text-lg font-medium">{{ room.name }}</h3>
+            <p class="text-sm text-gray-500">
+              Componentes: {{ room.componentCount }} | 
+              Usuarios: {{ room.userCount }} | 
+              Creada: {{ room.createdAt | date:'medium' }}
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button 
+              (click)="joinRoom(room.id)"
+              class="bg-green-600 text-white px-4 py-1 rounded-lg hover:bg-green-700">
+              Ver sala
+            </button>
+            <button 
+              (click)="openUserSelectionModal(room.id)"
+              class="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700">
+              Agregar usuarios
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showUserSelection" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+    <h2 class="text-xl font-semibold mb-4">Agregar usuarios a la sala</h2>
+
+    <button 
+      (click)="showUserSelection = false"
+      class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-lg"
+    >
+      ✕
+    </button>
+
+    <ul class="max-h-64 overflow-y-auto divide-y divide-gray-200 mb-4">
+      <li *ngFor="let user of users" class="py-2 flex items-center">
+        <input 
+          type="checkbox" 
+          [checked]="selectedUsers.includes(user.UserId)" 
+          (change)="toggleUserSelection(user.UserId)"
+          class="mr-2"
+        />
+        <span>{{ user.username }}</span>
+      </li>
+    </ul>
+
+    <button
+      (click)="addUsersToRoom()"
+      class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+    >
+      Confirmar agregados
+    </button>
+  </div>
+</div>
