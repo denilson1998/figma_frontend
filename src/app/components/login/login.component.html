@@ -1,0 +1,66 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Iniciar Sesión</h2>
+
+    <form>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+        <input type="email" placeholder="usuario@correo.com"
+          class="mt-1 block w-full px-4 py-2 border rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300" />
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input type="password" placeholder="********"
+          class="mt-1 block w-full px-4 py-2 border rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300" />
+      </div>
+
+      <button type="submit" (click)="login()"
+        class="w-full bg-indigo-600 text-white py-2 px-4 rounded-xl hover:bg-indigo-700 transition duration-200">
+        Iniciar sesión
+      </button>
+
+      <button type="button" (click)="openRegisterModal()"
+        class="w-full bg-indigo-600 text-white py-2 px-4 rounded-xl hover:bg-indigo-700 transition duration-200 mt-4">
+        Registrar usuario
+      </button>
+    </form>
+
+
+
+    <!-- Modal -->
+<div *ngIf="showRegisterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-md relative">
+    <button (click)="closeRegisterModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+      &times;
+    </button>
+    <h2 class="text-xl font-bold mb-4">Registrar Usuario</h2>
+
+    <form (ngsubmit)="registerUser()" #registerForm="ngForm">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+        <input type="text" [(ngModel)]="registerData.name" name="name" required
+          class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300" />
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Correo</label>
+        <input type="email" [(ngModel)]="registerData.email" name="email" required
+          class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300" />
+      </div>
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input type="password" [(ngModel)]="registerData.password" name="password" required
+          class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300" />
+      </div>
+      <button type="submit"
+        class="w-full bg-green-600 text-white py-2 px-4 rounded-xl hover:bg-green-700 transition duration-200">
+        Registrar
+      </button>
+    </form>
+  </div>
+</div>
+
+
+  </div>
+</div>
