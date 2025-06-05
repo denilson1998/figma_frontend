@@ -22,11 +22,15 @@ export class RoomService {
     return this.http.get(`${this.baseUrl}?userId=${userId}`);
   }
 
+  getAssignedUserRooms(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/GetAssignedUserRooms/${userId}`);
+  }
+
   getRoomUsers(roomId: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/${roomId}/users`);
   }
 
-  addUserToRoom(roomId: string, userId: number): Observable<any> {
+  addUserToRoom(roomId: any, userId: number): Observable<any> {
     return this.http.post(`${this.baseUrl}/${roomId}/users`, { userId });
   }
 }

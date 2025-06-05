@@ -1,8 +1,7 @@
-<div class="canvas-container">
-  <!-- Panel de control -->
+<!-- <div class="canvas-container">
   <div class="control-panel">
     <h2>Sala: {{currentRoom?.name}}</h2>
-    <p>Usuarios conectados: {{connectedUsers.join(', ')}}</p>
+    <p>Usuarios conectados: {{connectedUsers.length}}</p>
     
     <div class="component-selector">
       <label>Tipo de componente:</label>
@@ -12,39 +11,134 @@
         <option value="image">Imagen</option>
         <option value="input">Campo de texto</option>
       </select>
+      <button class="btn btn-primary" (click)="addComponent()">Añadir componente</button>
+    </div>
+
+    <div class="device-selector">
+      <label>Dispositivo:</label>
+      <select [(ngModel)]="selectedDevice">
+        <option *ngFor="let device of deviceSizes" [ngValue]="device">
+          {{device.name}} ({{device.width}}x{{device.height}})
+        </option>
+      </select>
     </div>
   </div>
 
-  <!-- Canvases para cada dispositivo -->
-  <div class="device-canvases">
-    <div *ngFor="let device of deviceSizes; let i = index" 
-         class="device-wrapper">
-      <h3>{{device.name}} ({{device.width}}x{{device.height}})</h3>
-      <div class="device-canvas" 
-           [style.width.px]="device.width"
-           [style.height.px]="device.height"
-           (click)="addComponent($event, i)">
-        
-        <!-- Componentes del canvas -->
-        <div *ngFor="let component of components"
-             class="canvas-component"
-             [ngClass]="'component-' + component.type"
-             [style.left.px]="component.positionX"
-             [style.top.px]="component.positionY"
-             [style.width.px]="component.width"
-             [style.height.px]="component.height"
-             [style.background]="component.color"
-             [style.border]="component.type === 'input' ? '1px solid #ccc' : 'none'"
-             cdkDrag
-             (cdkDragEnded)="onDragEnd(component, $event)">
+  <div class="device-wrapper">
+    <h3>{{selectedDevice.name}} ({{selectedDevice.width}}x{{selectedDevice.height}})</h3>
+    <div class="device-canvas"
+         [style.width.px]="selectedDevice.width"
+         [style.height.px]="selectedDevice.height">
+         
+      <div *ngFor="let component of components"
+           class="canvas-component"
+           [ngClass]="'component-' + component.type"
+           [style.left.px]="component.positionX"
+           [style.top.px]="component.positionY"
+           [style.width.px]="component.width"
+           [style.height.px]="component.height"
+           [style.background]="component.color"
+           [style.border]="component.type === 'input' ? '1px solid #ccc' : 'none'"
+           cdkDrag
+           (cdkDragEnded)="onDragEnd(component, $event)">
+           
+        <span *ngIf="component.type !== 'image'">{{component.content}}</span>
+        <img *ngIf="component.type === 'image' && component.content" 
+             [src]="component.content" 
+             style="max-width: 100%; max-height: 100%;">
              
-          <span *ngIf="component.type !== 'image'">{{component.content}}</span>
-          <img *ngIf="component.type === 'image' && component.content" 
-               [src]="component.content" 
-               style="max-width: 100%; max-height: 100%;">
-               
-          <button class="delete-btn" (click)="removeComponent(component.id)">×</button>
-        </div>
+        <button class="delete-btn" (click)="removeComponent(component.id)">×</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="flex flex-col lg:flex-row gap-6 p-6">
+  <!-- Panel de control -->
+  <div class="w-full lg:w-1/4 bg-white rounded-xl shadow p-4 space-y-4">
+    <h2 class="text-xl font-semibold text-gray-700">Sala: {{ currentRoom?.name }}</h2>
+    <p class="text-sm text-gray-500">Usuarios conectados: {{ connectedUsers.length }}</p>
+    
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-600">Tipo de componente:</label>
+      <select [(ngModel)]="selectedComponentType"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="button">Botón</option>
+        <option value="text">Texto</option>
+        <!-- <option value="image">Imagen</option> -->
+        <option value="input">Campo de texto</option>
+      </select>
+      <button (click)="addComponent()"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+        Añadir componente
+      </button>
+    </div>
+
+    <div class="flex flex-wrap gap-4 mb-4">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="addLoginComponents()">Agregar Login</button>
+      <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" (click)="addRegisterComponents()">Agregar Registro</button>
+    </div>
+
+
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-600">Dispositivo:</label>
+      <!-- (ngModelChange)="onDeviceChange($event)" -->
+      <select [(ngModel)]="selectedDevice"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option *ngFor="let device of deviceSizes" [ngValue]="device">
+          {{ device.name }} ({{ device.width }}x{{ device.height }})
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="w-full lg:flex-1">
+    <h3 class="text-lg font-semibold text-gray-700 mb-2">
+      {{ selectedDevice.name }} ({{ selectedDevice.width }}x{{ selectedDevice.height }})
+    </h3>
+
+    <div class="relative bg-gray-100 border rounded-xl canvas-container overflow-auto"
+         [style.width.px]="selectedDevice.width"
+         [style.height.px]="selectedDevice.height">
+         
+      <div *ngFor="let component of components"
+           class="absolute rounded-md shadow-md overflow-hidden"
+           [ngClass]="'component-' + component.type"
+           [style.width.px]="component.width"
+           [style.height.px]="component.height"
+           [style.background]="component.color"
+           [style.border]="component.type === 'input' ? '1px solid #ccc' : 'none'"
+           cdkDrag
+           [cdkDragFreeDragPosition]="{ x: component.positionX, y: component.positionY }"
+           [cdkDragBoundary]="'.canvas-container'"
+           (cdkDragMoved)="onDragMoved($event, component)">
+           
+        <ng-container [ngSwitch]="component.type">
+          <!-- TEXT -->
+          <span *ngSwitchCase="'text'" class="block p-2 text-sm text-gray-800">
+            {{ component.content }}
+          </span>
+
+          <!-- INPUT -->
+          <input *ngSwitchCase="'input'"
+                class="w-full h-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                [placeholder]="component.content"
+                type="text" />
+
+          <!-- BUTTON -->
+          <button *ngSwitchCase="'button'"
+                  class="w-full h-full px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+            {{ component.content }}
+          </button>
+        </ng-container>
+        <img *ngIf="component.type === 'image' && component.content"
+             [src]="component.content"
+             class="w-full h-full object-contain" />
+
+        <button (click)="removeComponent(component.id)"
+                class="absolute top-1 right-1 text-white bg-red-500 hover:bg-red-600 rounded-full w-6 h-6 flex items-center justify-center text-sm">
+          ×
+        </button>
       </div>
     </div>
   </div>

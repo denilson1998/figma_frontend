@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { RoomService } from '../../services/room.service';
 import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,20 +17,23 @@ import { forkJoin } from 'rxjs';
 export class DashboardComponent {
   newRoomName: string = '';
   rooms: any[] = [];
+  asignedRooms: any[] = [];
   users: any[] = []; 
   selectedUsers: number[] = [];
   userId: any = "";
   showUserSelection: boolean = false;
   currentRoomId: string | null = null;
   selectedRoomId: number | null = null;
-
-  constructor(private http: HttpClient, private userService: UserService, private roomService: RoomService) {
+  
+  constructor(private http: HttpClient, private userService: UserService, private roomService: RoomService, private router: Router) {
     this.userId = sessionStorage.getItem("userId");
   }
 
   ngOnInit() {
+    
     this.loadUserRooms();
     this.loadAllUsers();
+    this.loadAssignedUserRooms();
   }
   
   loadAllUsers() {
@@ -44,6 +48,18 @@ export class DashboardComponent {
       next: (rooms: any) => this.rooms = rooms,
       error: (err: any) => console.error('Error loading rooms', err)
     });
+  }
+
+  loadAssignedUserRooms() {
+    this.roomService.getAssignedUserRooms(this.userId).subscribe(
+      {
+        next: (resp: any) => {
+          console.log(resp);
+          this.asignedRooms = resp
+        },
+        error: (err: any) => console.error('Error loading rooms', err)
+      }
+    );
   }
 
   createRoom() {
@@ -64,7 +80,7 @@ export class DashboardComponent {
           userCount: 1
         });
         this.currentRoomId = newRoom.roomId;
-        this.showUserSelection = true;
+        // this.showUserSelection = true;
         this.newRoomName = '';
       },
       error: (err: any) => console.error('Error creating room', err)
@@ -81,12 +97,17 @@ export class DashboardComponent {
   }
 
   addUsersToRoom() {
-    if (!this.currentRoomId || this.selectedUsers.length === 0) return;
+    console.log(this.selectedRoomId);
 
+    console.log(this.selectedUsers);
+    
+    if (!this.selectedRoomId || this.selectedUsers.length === 0) return;
+  
     const requests = this.selectedUsers.map(userId => 
-      this.roomService.addUserToRoom(this.currentRoomId!, userId)
+      this.roomService.addUserToRoom(this.selectedRoomId, userId)
     );
-
+    
+    console.log('Requests:', requests);
     // Usando forkJoin para manejar múltiples peticiones
     forkJoin(requests).subscribe({
       next: () => {
@@ -102,30 +123,52 @@ export class DashboardComponent {
     this.roomService.getRoomUsers(roomId).subscribe({
       next: (users: any) => {
         console.log('Usuarios en la sala:', users);
-        // Aquí podrías mostrar un modal con la lista de usuarios
       },
       error: (err: any) => console.error('Error loading room users', err)
     });
   }
 
-  joinRoom(roomId: string) {
-    this.getRoomUsers(roomId);
-    // Lógica para unirse a la sala via SignalR
+  async joinRoom(roomId: string) {
+    try {
+      // 1. Obtener usuarios (si es necesario)
+      this.getRoomUsers(roomId);
+      console.log(this.userId);
+      console.log(roomId);
+      // 2. Navegar al canva
+      await this.router.navigate(['/canva', roomId], {
+        queryParams: { userId: this.userId }
+      });
+
+      // 3. Lógica de SignalR (opcional, podría ir en CanvaComponent)
+      // this.signalService.joinRoom(roomId, this.userName);
+    } catch (err) {
+      console.error('Error al unirse a la sala:', err);
+      // Mostrar mensaje al usuario
+    }
   }
 
   openUserSelectionModal(roomId: number) {
+    console.log(roomId);
     this.selectedRoomId = roomId;
     this.showUserSelection = true;
     
      this.userService.getAllUsers().subscribe({
         next: (resp) => {
           console.log(resp);
-          this.users = resp;
+          this.users = resp.filter((c: any) => c.userId != this.userId);
+          console.log(this.users);
         },
         error: (err) => {
           console.error('Error al obtener usuarios', err);
         }
       });
 
+  }
+
+  logout(){
+    console.log("TEST");
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+    console.log("TESTfinal");
   }
 }

@@ -1,11 +1,11 @@
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
 import { NgModule } from '@angular/core';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent},
-  { path: 'dashboard', component: DashboardComponent},
+  // { path: 'login', component: LoginComponent},
+  { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
+  { path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+  { path: 'canva/:roomId', loadComponent: () => import('./components/canva/canva.component').then(m => m.CanvaComponent) },
   { path: '**', redirectTo: 'login' }             
 ];
 
