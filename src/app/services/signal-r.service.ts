@@ -66,7 +66,24 @@ export class SignalRService {
   }
 
   public async moveComponent(roomId: string, componentId: string, x: number, y: number): Promise<void> {
-    await this.hubConnection.invoke('MoveComponent', roomId, componentId, x, y);
+    // await this.hubConnection.invoke('MoveComponent', roomId, componentId, x, y);
+    try {
+      if (!this.hubConnection || this.hubConnection.state !== HubConnectionState.Connected) {
+        throw new Error('SignalR connection is not established');
+      }
+  
+      // Validación básica en el cliente antes de enviar
+      if (x < 0 || y < 0 || x > 5000 || y > 5000) {
+        console.warn(`Coordenadas inválidas: (${x}, ${y})`);
+        return;
+      }
+  
+      await this.hubConnection.invoke('MoveComponent', Number(roomId), componentId, Math.round(x), Math.round(y));
+    } catch (err) {
+      console.error('Error en moveComponent:', err);
+      // Opcional: Notificar al componente para mostrar error al usuario
+      throw err; // Propaga el error para que el componente lo maneje
+    }
   }
   // public async moveComponent(roomId: string, componentId: string, x: number, y: number): Promise<void> {
   //   this.moveComponentSubject.next({ roomId, componentId, x, y });

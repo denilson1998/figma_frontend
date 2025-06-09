@@ -1,10 +1,31 @@
 
+/* ::ng-deep .cdk-drag-preview {
+  opacity: 0.8;
+  border: 2px dashed #2563eb;
+  border-radius: 0.5rem;
+} */
+
+.component {
+  transition: left 0.05s linear, top 0.05s linear;
+}
+
 ::ng-deep .cdk-drag-preview {
   opacity: 0.8;
   border: 2px dashed #2563eb;
   border-radius: 0.5rem;
+  background: white;
+  z-index: 1000;
 }
 
-.component {
-  transition: left 0.05s linear, top 0.05s linear;
+.canvas-container > div[cdrdrag] {
+  position: absolute !important;
+}
+
+.remove-btn {
+  top: 4px;
+  right: 4px;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1rem;
 }
