@@ -17,4 +17,9 @@ export class IAService {
     formData.append('file', imageFile);
     return this.http.post<{ components: any[] }>('https://localhost:7243/api/IAGeneration/analyze', formData);
   }
+
+  generateFromPrompt(data: any): Observable<{ components: any[] }> {
+    
+    return this.http.post<{ components: any[] }>('https://localhost:7243/api/IAGeneration/generate-from-prompt', data);
+  }
 }

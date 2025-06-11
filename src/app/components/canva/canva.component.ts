@@ -34,7 +34,12 @@ export class CanvaComponent implements OnInit, OnDestroy{
   selectedDevice = this.deviceSizes[0];
   
   selectedComponentType: string = 'button';
+  generateUsingIAModel: boolean = false;
+  customPrompt = '';
+  
   private subscriptions: Subscription[] = [];
+
+
   constructor(
     private signalService: SignalRService,
     private roomService: RoomService,
@@ -615,7 +620,7 @@ export class CanvaComponent implements OnInit, OnDestroy{
     this.iaService.analyzeSketch(file).subscribe({
       next: (response: any) => {
         console.log(response);
-        // this.processSketchResponse(response.components);
+        this.processSketchResponse(response.components);
       },
       error: (err: any) => {
         console.error('Error al procesar el boceto:', err);
@@ -650,5 +655,29 @@ export class CanvaComponent implements OnInit, OnDestroy{
       'image': 100
     };
     return heights[type] || 40;
+  }
+
+  generateUsingIA(){
+    this.generateUsingIAModel = true;
+  }
+
+  generateFormFromPrompt(customPrompt: any){
+    
+    let data = {
+      Prompt: this.customPrompt
+    };
+
+    this.iaService.generateFromPrompt(data).subscribe(
+      {
+        next: (resp: any) => {
+          console.log(resp);
+          this.processSketchResponse(resp.components);
+        },
+        error: (error: any) => {
+          console.log(error);
+          
+        }
+      }
+    );
   }
 }
