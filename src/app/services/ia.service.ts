@@ -15,11 +15,11 @@ export class IAService {
   analyzeSketch(imageFile: File): Observable<{ components: any[] }> {
     const formData = new FormData();
     formData.append('file', imageFile);
-    return this.http.post<{ components: any[] }>('https://localhost:7243/api/IAGeneration/analyze', formData);
+    return this.http.post<{ components: any[] }>('https://figmabackend-production.up.railway.app/api/IAGeneration/analyze', formData);
   }
 
   generateFromPrompt(data: any): Observable<{ components: any[] }> {
     
-    return this.http.post<{ components: any[] }>('https://localhost:7243/api/IAGeneration/generate-from-prompt', data);
+    return this.http.post<{ components: any[] }>('https://figmabackend-production.up.railway.app/api/IAGeneration/generate-from-prompt', data);
   }
 }

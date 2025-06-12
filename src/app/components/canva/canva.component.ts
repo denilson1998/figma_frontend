@@ -142,14 +142,14 @@ export class CanvaComponent implements OnInit, OnDestroy{
     const positionY = Math.floor(Math.random() * maxY);
 
     const newComponent = {
-      id: this.generateId(), // number
-      type: this.selectedComponentType, // string
-      positionX: positionX, // int
-      positionY: positionY, // int
-      width: this.selectedComponentType === 'text' ? null : 100, // int?
-      height: this.selectedComponentType === 'text' ? null : 50, // int?
-      color: this.getDefaultColor(this.selectedComponentType), // string?
-      content: this.getDefaultContent(this.selectedComponentType), // string?
+      id: this.generateId(),
+      type: this.selectedComponentType, 
+      positionX: positionX, 
+      positionY: positionY,
+      width: this.selectedComponentType === 'text' ? null : 100, 
+      height: this.selectedComponentType === 'text' ? null : 50, 
+      color: this.getDefaultColor(this.selectedComponentType), 
+      content: this.getDefaultContent(this.selectedComponentType), 
       roomId: Number(this.roomId)
     };
     
@@ -159,74 +159,10 @@ export class CanvaComponent implements OnInit, OnDestroy{
     this.signalService.addComponent(+this.roomId, newComponent);
   }
   
-  // addLoginComponents() {
-  
-
-  //   const containerId = this.generateId();
-  
-  //   const containerComponent = {
-  //     id: containerId,
-  //     type: 'form-container',
-  //     positionX: 40,
-  //     positionY: 40,
-  //     width: 300,
-  //     height: 280,
-  //     color: '#ffffff',
-  //     content: '', 
-  //     roomId: Number(this.roomId),
-  //     tailwindClasses: 'bg-white shadow-lg rounded-xl p-6 flex flex-col gap-4'
-  //   };
-  
-  //   const fields = [
-  //     { type: 'text', content: 'Iniciar sesión', offsetY: 0, class: 'text-xl font-bold text-center' },
-  //     { type: 'text', content: 'Correo electrónico', offsetY: 40, class: 'text-sm font-medium' },
-  //     {
-  //       type: 'input',
-  //       content: 'correo@ejemplo.com',
-  //       offsetY: 65,
-  //       class: 'px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
-  //     },
-  //     { type: 'text', content: 'Contraseña', offsetY: 110, class: 'text-sm font-medium' },
-  //     {
-  //       type: 'input',
-  //       content: '********',
-  //       offsetY: 135,
-  //       class: 'px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
-  //     },
-  //     {
-  //       type: 'button',
-  //       content: 'Ingresar',
-  //       offsetY: 190,
-  //       class: 'bg-blue-600 text-white rounded py-2 px-4 w-full text-center hover:bg-blue-700'
-  //     }
-  //   ];
-  
-  //   this.signalService.addComponent(containerComponent.roomId, containerComponent);
-  
-  //   fields.forEach((field, i) => {
-  //     const newComponent = {
-  //       id: this.generateId(),
-  //       type: field.type,
-  //       positionX: containerComponent.positionX + 20,
-  //       positionY: containerComponent.positionY + field.offsetY + 20,
-  //       width: containerComponent.width - 40,
-  //       height: field.type === 'text' ? null : 40,
-  //       color: field.type === 'text' ? 'transparent' : this.getDefaultColor(field.type),
-  //       content: field.content,
-  //       roomId: Number(this.roomId),
-  //       tailwindClasses: field.class || ''
-  //     };
-      
-  //     this.signalService.addComponent(containerComponent.roomId, newComponent);
-  //   });
-
-    
-  // }
   addLoginComponents() {
     const deviceWidth = this.selectedDevice.width;
     const deviceHeight = this.selectedDevice.height;
   
-    // Tamaños mínimos seguros
     const containerWidth = Math.min(300, deviceWidth * 0.85);
     const containerHeight = Math.min(280, deviceHeight * 0.5);
   
@@ -250,30 +186,6 @@ export class CanvaComponent implements OnInit, OnDestroy{
   
     const spacingUnit = 40;
   
-    // const fields = [
-    //   { type: 'text', content: 'Iniciar sesión', offsetY: 0, class: 'text-xl font-bold text-center' },
-    //   { type: 'text', content: 'Correo electrónico', offsetY: spacingUnit, class: 'text-sm font-medium' },
-    //   {
-    //     type: 'input',
-    //     content: 'correo@ejemplo.com',
-    //     offsetY: spacingUnit + 25,
-    //     class: 'px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
-    //   },
-    //   { type: 'text', content: 'Contraseña', offsetY: spacingUnit * 2 + 10, class: 'text-sm font-medium' },
-    //   {
-    //     type: 'input',
-    //     content: '********',
-    //     offsetY: spacingUnit * 2 + 35,
-    //     class: 'px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
-    //   },
-    //   {
-    //     type: 'button',
-    //     content: 'Ingresar',
-    //     offsetY: spacingUnit * 3 + 10,
-    //     class: 'bg-blue-600 text-white rounded py-2 px-4 w-full text-center hover:bg-blue-700'
-    //   }
-    // ];
-
     const fields = [
       {
         type: 'text',
@@ -329,7 +241,7 @@ export class CanvaComponent implements OnInit, OnDestroy{
     this.signalService.addComponent(containerComponent.roomId, containerComponent);
   
     fields.forEach((field) => {
-      const height = field.type === 'text' ? 24 : 40; // <-- aseguramos que height nunca sea null
+      const height = field.type === 'text' ? 24 : 40;
   
       const newComponent = {
         id: this.generateId(),
@@ -396,41 +308,21 @@ export class CanvaComponent implements OnInit, OnDestroy{
     );
   }
 
-  // onDragMoved(event: CdkDragMove, component: any) {
-  //   const pos = event.pointerPosition;
-  
-  //   const boundingRect = (event.source.element.nativeElement as HTMLElement).offsetParent?.getBoundingClientRect();
-  //   const offsetX = boundingRect?.left ?? 0;
-  //   const offsetY = boundingRect?.top ?? 0;
-  
-  //   const newX = pos.x - offsetX;
-  //   const newY = pos.y - offsetY;
-  
-  //   component.positionX = newX;
-  //   component.positionY = newY;
-  
-  //   this.signalService.moveComponent(
-  //     this.roomId,
-  //     component.id,
-  //     component.positionX,
-  //     component.positionY
-  //   );
-  // }
   onDragMoved(event: CdkDragMove, component: any) {
     const pos = event.pointerPosition;
     
     const boundingRect = (event.source.element.nativeElement as HTMLElement).offsetParent?.getBoundingClientRect();
+
     const offsetX = boundingRect?.left ?? 0;
+
     const offsetY = boundingRect?.top ?? 0;
   
-    // Calcula posición sin restricciones
     let newX = pos.x - offsetX;
+
     let newY = pos.y - offsetY;
   
-    // Limita newX para que no salga del canvas por la derecha ni por la izquierda
     newX = Math.max(0, Math.min(newX, this.selectedDevice.width - component.width));
   
-    // Limita newY para que no salga por arriba ni por abajo
     newY = Math.max(0, Math.min(newY, this.selectedDevice.height - component.height));
   
     component.positionX = newX;
@@ -444,40 +336,10 @@ export class CanvaComponent implements OnInit, OnDestroy{
     );
   }
   
-  // async onDragMoved(event: CdkDragMove, component: any) {
-  //   // Obtén la posición del mouse relativa al canvas
-  //   const canvas = event.source.element.nativeElement.closest('.canvas-container');
-  //   const canvasRect = canvas!.getBoundingClientRect();
-  
-  //   // Calcula las coordenadas relativas al canvas (considerando desplazamiento y escala)
-  //   const newX = event.pointerPosition.x - canvasRect.left;
-  //   const newY = event.pointerPosition.y - canvasRect.top;
-  
-  //   // Asegúrate de que no se salga de los límites del canvas
-  //   const maxX = this.selectedDevice.width - (component.width || 0);
-  //   const maxY = this.selectedDevice.height - (component.height || 0);
-  
-  //   component.positionX = Math.max(0, Math.min(newX, maxX));
-  //   component.positionY = Math.max(0, Math.min(newY, maxY));
-  
-  //   try {
-  //     await this.signalService.moveComponent(
-  //       this.roomId.toString(),
-  //       component.id,
-  //       newX,
-  //       newY
-  //     );
-  //   } catch (err) {
-  //     console.error('Error al mover componente:', err);
-  //   }
-  // }
- 
-
   removeComponent(componentId: any) {
-    // Eliminar localmente
+    
     this.components = this.components.filter(c => c.id !== componentId);
     
-    // Enviar al servidor
     this.signalService.removeComponent(this.roomId, componentId);
   }
   
@@ -510,7 +372,6 @@ export class CanvaComponent implements OnInit, OnDestroy{
   }
 
   onDeviceChange(device: any) {
-    // Envía el cambio al backend
     this.signalService.changeDeviceSize(this.roomId, device);
 
     this.adjustComponentsToDevice();
@@ -518,15 +379,13 @@ export class CanvaComponent implements OnInit, OnDestroy{
 
   private adjustComponentsToDevice() {
     this.components.forEach(comp => {
-      // Asegura que no se salga por la derecha
+
       const maxX = Math.max(0, this.selectedDevice.width - (comp.width || 50));
       comp.positionX = Math.min(comp.positionX, maxX);
   
-      // Asegura que no se salga por abajo
       const maxY = Math.max(0, this.selectedDevice.height - (comp.height || 50));
       comp.positionY = Math.min(comp.positionY, maxY);
   
-      // Si por algún motivo X o Y es menor que 0, ajusta también
       comp.positionX = Math.max(0, comp.positionX);
       comp.positionY = Math.max(0, comp.positionY);
     });

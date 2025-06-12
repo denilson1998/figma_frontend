@@ -16,7 +16,6 @@ export class LoginComponent {
   email = '';
   password = '';
 
-  //nueva logica para el modal de registro
   showRegisterModal = false;
   registerData = {
     name: '',
@@ -30,7 +29,6 @@ export class LoginComponent {
   }
 
   login() {
-    // Implement login logic here
     console.log('Login enviado', this.email, this.password);
     this.userService.login({ Email: this.email, Password: this.password })
       .subscribe({
@@ -55,7 +53,6 @@ export class LoginComponent {
   }
 
   registerUser() {
-    // Handle modal close event if needed
     console.log('Usuario registrado', this.registerData);
 
     this.userService.register({

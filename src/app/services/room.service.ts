@@ -7,7 +7,8 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class RoomService {
 
-  private baseUrl = 'https://localhost:7243/api/Rooms';
+  // private baseUrl = 'https://localhost:7243/api/Rooms';
+  private baseUrl = 'https://figmabackend-production.up.railway.app/api/Rooms';
   
   constructor(private http: HttpClient) 
   { 

@@ -1,14 +1,13 @@
 <div class="min-h-screen bg-gray-100 p-6">
   <div class="max-w-5xl mx-auto">
-    <!-- Header -->
+    
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
       <button (click)="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
         Cerrar sesión
       </button>
     </div>
-
-    <!-- Crear Room -->
+    
     <div class="bg-white p-6 rounded-xl shadow-md mb-6">
       <h2 class="text-xl font-semibold mb-4">Crear nueva sala</h2>
       <form (submit)="createRoom()" class="flex flex-col sm:flex-row gap-4">
@@ -26,7 +25,6 @@
       </form>
     </div>
 
-    <!-- Lista de Rooms -->
     <div class="bg-white p-6 rounded-xl shadow-md">
       <h2 class="text-xl font-semibold mb-4">Tus salas creadas</h2>
       <div *ngIf="rooms.length === 0" class="text-gray-500">No hay salas creadas aún.</div>

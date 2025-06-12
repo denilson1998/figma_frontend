@@ -19,18 +19,19 @@ export class SignalRService {
 
 
   constructor() { 
-    // this.moveComponentSubject
-    // .pipe(throttleTime(50)) // 20 FPS aprox
-    // .subscribe(({ roomId, componentId, x, y }) => {
-    //   if (this.hubConnection && this.hubConnection.state === HubConnectionState.Connected) {
-    //     this.hubConnection.invoke('MoveComponent', roomId, componentId, x, y);
-    //   }
-    // });
+    this.moveComponentSubject
+    .pipe(throttleTime(50)) // 20 FPS aprox
+    .subscribe(({ roomId, componentId, x, y }) => {
+      if (this.hubConnection && this.hubConnection.state === HubConnectionState.Connected) {
+        this.hubConnection.invoke('MoveComponent', roomId, componentId, x, y);
+      }
+    });
   }
 
   public async startConnection(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl('https://localhost:7243/canvasHub')
+      // .withUrl('https://localhost:7243/canvasHub')
+      .withUrl('https://figmabackend-production.up.railway.app/canvasHub')
       .withAutomaticReconnect()
       .build();
 
@@ -66,13 +67,12 @@ export class SignalRService {
   }
 
   public async moveComponent(roomId: string, componentId: string, x: number, y: number): Promise<void> {
-    // await this.hubConnection.invoke('MoveComponent', roomId, componentId, x, y);
+  
     try {
       if (!this.hubConnection || this.hubConnection.state !== HubConnectionState.Connected) {
         throw new Error('SignalR connection is not established');
       }
   
-      // Validación básica en el cliente antes de enviar
       if (x < 0 || y < 0 || x > 5000 || y > 5000) {
         console.warn(`Coordenadas inválidas: (${x}, ${y})`);
         return;
@@ -81,13 +81,9 @@ export class SignalRService {
       await this.hubConnection.invoke('MoveComponent', Number(roomId), componentId, Math.round(x), Math.round(y));
     } catch (err) {
       console.error('Error en moveComponent:', err);
-      // Opcional: Notificar al componente para mostrar error al usuario
-      throw err; // Propaga el error para que el componente lo maneje
+      throw err;
     }
   }
-  // public async moveComponent(roomId: string, componentId: string, x: number, y: number): Promise<void> {
-  //   this.moveComponentSubject.next({ roomId, componentId, x, y });
-  // }
 
   public async removeComponent(roomId: string, componentId: string): Promise<void> {
     await this.hubConnection.invoke('RemoveComponent', roomId, componentId);

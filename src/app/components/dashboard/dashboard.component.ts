@@ -80,7 +80,6 @@ export class DashboardComponent {
           userCount: 1
         });
         this.currentRoomId = newRoom.roomId;
-        // this.showUserSelection = true;
         this.newRoomName = '';
       },
       error: (err: any) => console.error('Error creating room', err)
@@ -108,12 +107,11 @@ export class DashboardComponent {
     );
     
     console.log('Requests:', requests);
-    // Usando forkJoin para manejar múltiples peticiones
     forkJoin(requests).subscribe({
       next: () => {
         this.selectedUsers = [];
         this.showUserSelection = false;
-        this.loadUserRooms(); // Refrescar la lista
+        this.loadUserRooms();
       },
       error: (err: any) => console.error('Error adding users to room', err)
     });
@@ -130,20 +128,15 @@ export class DashboardComponent {
 
   async joinRoom(roomId: string) {
     try {
-      // 1. Obtener usuarios (si es necesario)
       this.getRoomUsers(roomId);
       console.log(this.userId);
       console.log(roomId);
-      // 2. Navegar al canva
       await this.router.navigate(['/canva', roomId], {
         queryParams: { userId: this.userId }
       });
 
-      // 3. Lógica de SignalR (opcional, podría ir en CanvaComponent)
-      // this.signalService.joinRoom(roomId, this.userName);
     } catch (err) {
       console.error('Error al unirse a la sala:', err);
-      // Mostrar mensaje al usuario
     }
   }
 

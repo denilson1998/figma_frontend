@@ -7,7 +7,8 @@ import { Observable } from 'rxjs/internal/Observable';
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = 'https://localhost:7243/api/User';
+  // private baseUrl = 'https://localhost:7243/api/User';
+  private baseUrl = 'https://figmabackend-production.up.railway.app/api/User';
   constructor(private http: HttpClient) 
   { 
 
